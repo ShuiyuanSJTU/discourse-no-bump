@@ -1,0 +1,5 @@
+plugins:
+  no_bump_enabled:
+    client: true
+    default: false
+

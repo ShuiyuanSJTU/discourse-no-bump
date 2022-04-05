@@ -1,0 +1,11 @@
+en:
+  js:
+    no_bump:
+      topic_banner: "New replies cannot bump this topic"
+      button:
+        allow_bump: 
+          button: "Allow Bump"
+          help: "New replies can bump this topic"
+        no_bump: 
+          button: "No Dump"
+          help: "New replies cannot bump this topic"

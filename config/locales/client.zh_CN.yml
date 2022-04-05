@@ -1,0 +1,11 @@
+zh_CN:
+  js:
+    no_bump:
+      topic_banner: "本话题中的新回复不会在时间线中顶起本话题"
+      button:
+        allow_bump: 
+          button: "允许顶帖"
+          help: "新回复能顶起话题"
+        no_bump: 
+          button: "禁止顶帖"
+          help: "新回复不能顶起话题"
