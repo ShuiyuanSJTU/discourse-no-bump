@@ -49,6 +49,22 @@ after_initialize do
     end
   end
 
+  module OverrideNoBumpWhenMove
+    def update_last_post_stats
+      post = destination_topic.ordered_posts.where.not(post_type: Post.types[:whisper]).last
+      if post && post_ids.include?(post.id)
+        attrs = {}
+        attrs[:last_posted_at] = post.created_at
+        attrs[:last_post_user_id] = post.user_id
+        if !destination_topic.custom_fields['no_bump'] 
+          attrs[:bumped_at] = Time.now
+        end
+        attrs[:updated_at] = Time.now
+        destination_topic.update_columns(attrs)
+      end
+    end
+  end
+
   class ::PostCreator
     prepend OverrideNoBumpWhenCreate
   end
@@ -57,5 +73,8 @@ after_initialize do
     prepend OverrideNoBumpWhenRevise
   end
 
+  class ::PostMover
+    prepend OverrideNoBumpWhenMove
+  end
 end
 
