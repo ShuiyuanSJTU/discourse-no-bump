@@ -5,7 +5,7 @@ import { popupAjaxError } from "discourse/lib/ajax-error";
 
 function registerTopicFooterButtons(api) {
   api.registerTopicFooterButton({
-    id: "privatereplies",
+    id: "no-bump",
     icon() {
       const noBump = this.get("topic.no_bump");
       return noBump ? "far-eye" : "far-eye-slash";
