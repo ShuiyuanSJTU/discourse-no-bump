@@ -8,7 +8,7 @@ module DiscourseNoBump
       t = Topic.find(params[:topic_id])
       if current_user.id == t.user_id || current_user.staff?
         t.custom_fields['no_bump'] = true
-        t.save!
+        t.save_custom_fields
         render json: { no_bump_enabled: true }
       else
         render json: { failed: 'Access denied' }, status: 403
@@ -19,7 +19,7 @@ module DiscourseNoBump
       t = Topic.find(params[:topic_id])
       if current_user.staff?
         t.custom_fields['no_bump'] = false
-        t.save!
+        t.save_custom_fields
         render json: { no_bump_enabled: false }
       else
         render json: { failed: 'Access denied' }, status: 403
