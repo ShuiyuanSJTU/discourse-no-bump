@@ -79,4 +79,11 @@ after_initialize do
   class ::PostMover
     prepend OverrideNoBumpWhenMove
   end
+
+  TopicQuery.add_custom_filter(:no_bump) do |results, topic_query|
+    if topic_query.options[:no_bump] && topic_query.options[:no_bump] == 'true'
+      results = results.joins("INNER JOIN topic_custom_fields ON topic_custom_fields.topic_id = topics.id").where("topic_custom_fields.name = 'no_bump' AND topic_custom_fields.value = 't'")
+    end
+    results
+  end
 end
