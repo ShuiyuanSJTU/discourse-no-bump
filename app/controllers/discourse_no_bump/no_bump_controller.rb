@@ -6,7 +6,7 @@ module DiscourseNoBump
 
     def enable
       t = Topic.find(params[:topic_id])
-      if current_user.id == t.user_id || current_user.staff?
+      if current_user.has_trust_level?(TrustLevel[4]) || current_user.staff?
         t.custom_fields['no_bump'] = true
         t.save_custom_fields
         render json: { no_bump_enabled: true }
@@ -17,7 +17,7 @@ module DiscourseNoBump
 
     def disable
       t = Topic.find(params[:topic_id])
-      if current_user.staff?
+      if current_user.has_trust_level?(TrustLevel[4]) || current_user.staff?
         t.custom_fields['no_bump'] = false
         t.save_custom_fields
         render json: { no_bump_enabled: false }

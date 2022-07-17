@@ -2,7 +2,7 @@
 # about: Discourse no bump plugin
 # version: 0.1
 # authors: Jiajun Du
-# url: https://github.com/dujiajun/discourse-no-bump
+# url: https://github.com/ShuiyuanSJTU/discourse-no-bump
 
 enabled_site_setting :no_bump_enabled
 
@@ -14,9 +14,9 @@ after_initialize do
 
   Topic.register_custom_field_type('no_bump', :boolean)
   add_to_serializer :topic_view, :no_bump do
-    object.topic.custom_fields['no_bump'] 
+    object.topic.custom_fields['no_bump']
   end
-   
+
   Discourse::Application.routes.append do
     mount ::DiscourseNoBump::Engine, at: "/no_bump"
   end
@@ -24,23 +24,25 @@ after_initialize do
   module OverrideNoBumpWhenCreate
     def update_topic_stats
       attrs = { updated_at: Time.now }
-  
+
       if @post.post_type != Post.types[:whisper] && !@opts[:silent]
         attrs[:last_posted_at] = @post.created_at
         attrs[:last_post_user_id] = @post.user_id
         attrs[:word_count] = (@topic.word_count || 0) + @post.word_count
         attrs[:excerpt] = @post.excerpt_for_topic if new_topic?
-        if !@topic.custom_fields['no_bump'] 
+        # override here
+        if !@topic.custom_fields['no_bump']
           attrs[:bumped_at] = @post.created_at unless @post.no_bump
         end
       end
-  
+
       @topic.update_columns(attrs)
     end
   end
 
   module OverrideNoBumpWhenRevise
     def bump_topic
+      # modify here
       return if bypass_bump? || !is_last_post? || @topic.custom_fields['no_bump']
       @topic.update_column(:bumped_at, Time.now)
       TopicTrackingState.publish_muted(@topic)
@@ -56,7 +58,8 @@ after_initialize do
         attrs = {}
         attrs[:last_posted_at] = post.created_at
         attrs[:last_post_user_id] = post.user_id
-        if !destination_topic.custom_fields['no_bump'] 
+        # modify here
+        if !destination_topic.custom_fields['no_bump']
           attrs[:bumped_at] = Time.now
         end
         attrs[:updated_at] = Time.now
@@ -77,4 +80,3 @@ after_initialize do
     prepend OverrideNoBumpWhenMove
   end
 end
-

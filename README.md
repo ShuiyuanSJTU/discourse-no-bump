@@ -1,6 +1,6 @@
 ## Discourse No Dump
 
-Provides a toggle to decide whether to dump a topic for topic owner and staff.
+Provides a toggle to decide whether to dump a topic for staff and tl4.
 
 ## How to Install this Plugin
 

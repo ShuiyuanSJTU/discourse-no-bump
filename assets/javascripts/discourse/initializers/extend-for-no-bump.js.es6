@@ -1,4 +1,3 @@
-
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
@@ -8,9 +7,8 @@ function registerTopicFooterButtons(api) {
     id: "no-bump",
     icon() {
       const noBump = this.get("topic.no_bump");
-      return noBump ? "far-eye" : "far-eye-slash";
+      return noBump ? "angle-up" : "angle-down";
     },
-    priority: 250,
     title() {
       const noBump = this.get("topic.no_bump");
       return `no_bump.button.${noBump ? "allow_bump" : "no_bump"}.help`;
@@ -24,18 +22,13 @@ function registerTopicFooterButtons(api) {
         return;
       }
 
-      var action;
-      if (this.get("topic.no_bump")) {
-        action = 'disable';
-      } else {
-        action = 'enable';
-      }
+      var action = this.get("topic.no_bump") ? "disable" : "enable";
 
-      return ajax('/no_bump/' + action + '.json', {
+      return ajax("/no_bump/" + action + ".json", {
         type: "PUT",
-        data: { topic_id: this.get("topic.id") }
+        data: { topic_id: this.get("topic.id") },
       })
-        .then(result => {
+        .then((result) => {
           this.set("topic.no_bump", result.no_bump_enabled);
         })
         .catch(popupAjaxError);
@@ -44,14 +37,13 @@ function registerTopicFooterButtons(api) {
       return this.site.mobileView;
     },
     classNames: ["no-bump"],
-    dependentKeys: [
-      "topic.no_bump"
-    ],
+    dependentKeys: ["topic.no_bump"],
     displayed() {
-      const topic_owner_id = this.get("topic.user_id");
-      const noBump = this.get("topic.no_bump");
-      return this.currentUser && ((!noBump && this.currentUser.id == topic_owner_id) || this.currentUser.staff);
-    }
+      return (
+        this.currentUser &&
+        (this.currentUser.trust_level == 4 || this.currentUser.staff)
+      );
+    },
   });
 }
 
@@ -63,6 +55,8 @@ export default {
       return;
     }
 
-    withPluginApi("0.8.28", api => registerTopicFooterButtons(api, container));
-  }
+    withPluginApi("0.8.28", (api) =>
+      registerTopicFooterButtons(api, container)
+    );
+  },
 };
