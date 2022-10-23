@@ -68,6 +68,15 @@ after_initialize do
     end
   end
 
+  module OverrideNoBumpMessageBus
+    def publish_latest(topic, whisper = false)
+      return if topic.custom_fields["no_bump"]
+      super
+    end
+  end
+  
+  TopicTrackingState.singleton_class.prepend OverrideNoBumpMessageBus
+  
   class ::PostCreator
     prepend OverrideNoBumpWhenCreate
   end
