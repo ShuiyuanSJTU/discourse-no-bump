@@ -3,89 +3,72 @@ import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 
 function registerTopicFooterButtons(api) {
-  api.registerTopicFooterButton({
-    id: "no-bump",
-    icon() {
-      const noBump = this.get("topic.no_bump");
-      return noBump ? "angle-up" : "angle-down";
-    },
-    title() {
-      const noBump = this.get("topic.no_bump");
-      return `no_bump.button.${noBump ? "allow_bump" : "no_bump"}.help`;
-    },
-    label() {
-      const noBump = this.get("topic.no_bump");
-      return `no_bump.button.${noBump ? "allow_bump" : "no_bump"}.button`;
-    },
-    action() {
-      if (!this.get("topic.user_id")) {
-        return;
-      }
+  const currentUser = api.getCurrentUser();
+  if (!(currentUser && (currentUser.trust_level == 4 || currentUser.staff)))
+    return;
+  api.addTopicAdminMenuButton((topic) => {
+    return {
+      id: "no-bump",
+      get icon() {
+        const noBump = topic.get("no_bump");
+        return noBump ? "angle-up" : "angle-down";
+      },
+      get label() {
+        const noBump = topic.get("no_bump");
+        return `no_bump.button.${noBump ? "allow_bump" : "no_bump"}.button`;
+      },
+      action() {
+        if (!topic.get("user_id")) {
+          return;
+        }
 
-      var action = this.get("topic.no_bump") ? "disable" : "enable";
+        var action = topic.get("no_bump") ? "disable" : "enable";
 
-      return ajax("/no_bump/" + action + ".json", {
-        type: "PUT",
-        data: { topic_id: this.get("topic.id") },
-      })
-        .then((result) => {
-          this.set("topic.no_bump", result.no_bump_enabled);
+        return ajax("/no_bump/" + action + ".json", {
+          type: "PUT",
+          data: { topic_id: topic.get("id") },
         })
-        .catch(popupAjaxError);
-    },
-    dropdown() {
-      return this.site.mobileView;
-    },
-    classNames: ["no-bump"],
-    dependentKeys: ["topic.no_bump"],
-    displayed() {
-      return (
-        this.currentUser &&
-        (this.currentUser.trust_level == 4 || this.currentUser.staff)
-      );
-    },
+          .then((result) => {
+            topic.set("no_bump", result.no_bump_enabled);
+          })
+          .catch(popupAjaxError);
+      },
+      classNames: ["no-bump"],
+    }
   });
-  api.registerTopicFooterButton({
-    id: "hide-from-hot",
-    icon() {
-      const noBump = this.get("topic.hide_from_hot");
-      return noBump ? "angle-up" : "angle-down";
-    },
-    title() {
-      const noBump = this.get("topic.hide_from_hot");
-      return `hide_from_hot.button.${noBump ? "show" : "hide"}.help`;
-    },
-    label() {
-      const noBump = this.get("topic.hide_from_hot");
-      return `hide_from_hot.button.${noBump ? "show" : "hide"}.button`;
-    },
-    action() {
-      if (!this.get("topic.user_id")) {
-        return;
-      }
+  api.addTopicAdminMenuButton((topic) => {
+    return {
+      id: "hide-from-hot",
+      get icon() {
+        const hide_from_hot = topic.get("hide_from_hot");
+        return hide_from_hot ? "far-eye" : "far-eye-slash";
+      },
+      title() {
+        const hide_from_hot = topic.get("hide_from_hot");
+        return `hide_from_hot.button.${hide_from_hot ? "show" : "hide"}.help`;
+      },
+      get label() {
+        const hide_from_hot = topic.get("hide_from_hot");
+        return `hide_from_hot.button.${hide_from_hot ? "show" : "hide"}.button`;
+      },
+      action() {
+        if (!topic.get("user_id")) {
+          return;
+        }
 
-      var action = this.get("topic.hide_from_hot") ? "disable" : "enable";
+        var action = topic.get("hide_from_hot") ? "disable" : "enable";
 
-      return ajax("/no_bump/hide_from_hot/" + action + ".json", {
-        type: "PUT",
-        data: { topic_id: this.get("topic.id") },
-      })
-        .then((result) => {
-          this.set("topic.hide_from_hot", result.hide_from_hot_enabled);
+        return ajax("/no_bump/hide_from_hot/" + action + ".json", {
+          type: "PUT",
+          data: { topic_id: topic.get("id") },
         })
-        .catch(popupAjaxError);
-    },
-    dropdown() {
-      return this.site.mobileView;
-    },
-    classNames: ["hide-from-hot"],
-    dependentKeys: ["topic.hide_from_hot"],
-    displayed() {
-      return (
-        this.currentUser &&
-        (this.currentUser.trust_level == 4 || this.currentUser.staff)
-      );
-    },
+          .then((result) => {
+            topic.set("hide_from_hot", result.hide_from_hot_enabled);
+          })
+          .catch(popupAjaxError);
+      },
+      classNames: ["hide-from-hot"],
+    }
   });
 }
 
