@@ -45,6 +45,48 @@ function registerTopicFooterButtons(api) {
       );
     },
   });
+  api.registerTopicFooterButton({
+    id: "hide-from-hot",
+    icon() {
+      const noBump = this.get("topic.hide_from_hot");
+      return noBump ? "angle-up" : "angle-down";
+    },
+    title() {
+      const noBump = this.get("topic.hide_from_hot");
+      return `hide_from_hot.button.${noBump ? "show" : "hide"}.help`;
+    },
+    label() {
+      const noBump = this.get("topic.hide_from_hot");
+      return `hide_from_hot.button.${noBump ? "show" : "hide"}.button`;
+    },
+    action() {
+      if (!this.get("topic.user_id")) {
+        return;
+      }
+
+      var action = this.get("topic.hide_from_hot") ? "disable" : "enable";
+
+      return ajax("/no_bump/hide_from_hot/" + action + ".json", {
+        type: "PUT",
+        data: { topic_id: this.get("topic.id") },
+      })
+        .then((result) => {
+          this.set("topic.hide_from_hot", result.hide_from_hot_enabled);
+        })
+        .catch(popupAjaxError);
+    },
+    dropdown() {
+      return this.site.mobileView;
+    },
+    classNames: ["hide-from-hot"],
+    dependentKeys: ["topic.hide_from_hot"],
+    displayed() {
+      return (
+        this.currentUser &&
+        (this.currentUser.trust_level == 4 || this.currentUser.staff)
+      );
+    },
+  });
 }
 
 export default {

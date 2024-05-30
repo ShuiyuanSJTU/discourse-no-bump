@@ -2,4 +2,7 @@ plugins:
   no_bump_enabled:
     client: true
     default: false
+  hide_closed_topics_in_hot_topics:
+    client: false
+    default: false
 

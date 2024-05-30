@@ -9,3 +9,11 @@ zh_CN:
         no_bump: 
           button: "禁止顶帖"
           help: "新回复不能顶起话题"
+    hide_from_hot:
+      button:
+        show: 
+          button: "允许展示"
+          help: "话题将会在热门话题中展示"
+        hide: 
+          button: "禁止展示"
+          help: "话题将不会在热门话题中展示"

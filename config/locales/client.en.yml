@@ -9,3 +9,11 @@ en:
         no_bump: 
           button: "No Dump"
           help: "New replies cannot bump this topic"
+    hide_from_hot:
+      button:
+        show: 
+          button: "Allow Show in Hot Topics"
+          help: "Topic will be displayed in hot topics"
+        hide: 
+          button: "Hide from Hot Topics"
+          help: "Topic will not be displayed in hot topics"

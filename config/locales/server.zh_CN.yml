@@ -1,3 +1,4 @@
 zh_CN:
   site_settings:
     no_bump_enabled: "启用禁止顶帖插件"
+    hide_closed_topics_in_hot_topics: "在热门话题中隐藏关闭的话题"

@@ -1,6 +1,6 @@
 # name: discourse-no-bump
 # about: Discourse no bump plugin
-# version: 0.1
+# version: 0.2.0
 # authors: Jiajun Du
 # url: https://github.com/ShuiyuanSJTU/discourse-no-bump
 
@@ -13,8 +13,12 @@ load File.expand_path('../lib/discourse_no_bump/engine.rb', __FILE__)
 after_initialize do
 
   Topic.register_custom_field_type('no_bump', :boolean)
+  Topic.register_custom_field_type('hide_from_hot', :boolean)
   add_to_serializer :topic_view, :no_bump do
     object.topic.custom_fields['no_bump']
+  end
+  add_to_serializer :topic_view, :hide_from_hot do
+    object.topic.custom_fields['hide_from_hot']
   end
 
   Discourse::Application.routes.append do
@@ -94,5 +98,20 @@ after_initialize do
       results = results.joins("INNER JOIN topic_custom_fields ON topic_custom_fields.topic_id = topics.id").where("topic_custom_fields.name = 'no_bump' AND topic_custom_fields.value = 't'")
     end
     results
+  end
+
+  register_modifier(:topic_query_create_list_topics) do |topics, options, topic_query|
+    next topics unless options[:filter] == :hot
+    topics = topics.where(<<~SQL)
+      topics.id NOT IN (
+        SELECT topic_id FROM topic_custom_fields 
+        WHERE (name = 'no_bump' AND value = 't')
+        OR (name = 'hide_from_hot' AND value = 't')
+      )
+    SQL
+    if SiteSetting.hide_closed_topics_in_hot_topics
+      topics = topics.where(closed:false)
+    end
+    topics
   end
 end

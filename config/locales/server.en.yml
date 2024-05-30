@@ -1,3 +1,4 @@
 en:
   site_settings:
     no_bump_enabled: "Enable the No Bump plugin."
+    hide_closed_topics_from_hot_topics: "Hide closed topics from hot topics."
