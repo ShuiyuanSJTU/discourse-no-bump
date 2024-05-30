@@ -22,7 +22,7 @@ function registerTopicFooterButtons(api) {
           return;
         }
 
-        var action = topic.get("no_bump") ? "disable" : "enable";
+        const action = topic.get("no_bump") ? "disable" : "enable";
 
         return ajax("/no_bump/" + action + ".json", {
           type: "PUT",
@@ -56,7 +56,7 @@ function registerTopicFooterButtons(api) {
           return;
         }
 
-        var action = topic.get("hide_from_hot") ? "disable" : "enable";
+        const action = topic.get("hide_from_hot") ? "disable" : "enable";
 
         return ajax("/no_bump/hide_from_hot/" + action + ".json", {
           type: "PUT",
