@@ -4,16 +4,12 @@ zh_CN:
       topic_banner: "本话题中的新回复不会顶帖"
       button:
         allow_bump: 
-          button: "允许顶帖"
-          help: "新回复能顶起话题"
+          title: "允许顶帖"
         no_bump: 
-          button: "禁止顶帖"
-          help: "新回复不能顶起话题"
+          title: "禁止顶帖"
     hide_from_hot:
       button:
         show: 
-          button: "允许展示"
-          help: "话题将会在热门话题中展示"
+          title: "允许展示在热议话题中"
         hide: 
-          button: "禁止展示"
-          help: "话题将不会在热门话题中展示"
+          title: "从热议话题中隐藏"

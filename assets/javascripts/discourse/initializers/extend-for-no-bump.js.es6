@@ -15,7 +15,7 @@ function registerTopicFooterButtons(api) {
       },
       get label() {
         const noBump = topic.get("no_bump");
-        return `no_bump.button.${noBump ? "allow_bump" : "no_bump"}.button`;
+        return `no_bump.button.${noBump ? "allow_bump" : "no_bump"}.title`;
       },
       action() {
         if (!topic.get("user_id")) {
@@ -43,13 +43,9 @@ function registerTopicFooterButtons(api) {
         const hide_from_hot = topic.get("hide_from_hot");
         return hide_from_hot ? "far-eye" : "far-eye-slash";
       },
-      title() {
-        const hide_from_hot = topic.get("hide_from_hot");
-        return `hide_from_hot.button.${hide_from_hot ? "show" : "hide"}.help`;
-      },
       get label() {
         const hide_from_hot = topic.get("hide_from_hot");
-        return `hide_from_hot.button.${hide_from_hot ? "show" : "hide"}.button`;
+        return `hide_from_hot.button.${hide_from_hot ? "show" : "hide"}.title`;
       },
       action() {
         if (!topic.get("user_id")) {

@@ -4,16 +4,12 @@ en:
       topic_banner: "New replies cannot bump this topic"
       button:
         allow_bump: 
-          button: "Allow Bump"
-          help: "New replies can bump this topic"
+          title: "Allow Bump"
         no_bump: 
-          button: "No Dump"
-          help: "New replies cannot bump this topic"
+          title: "No Dump"
     hide_from_hot:
       button:
         show: 
-          button: "Allow Show in Hot Topics"
-          help: "Topic will be displayed in hot topics"
+          title: "Allow Show in Hot Topics"
         hide: 
-          button: "Hide from Hot Topics"
-          help: "Topic will not be displayed in hot topics"
+          title: "Hide from Hot Topics"
