@@ -72,6 +72,13 @@ after_initialize do
     end
   end
 
+  module OverrideTopic
+    def reset_bumped_at(post_or_post_id = nil)
+      return if self.custom_fields['no_bump']
+      super
+    end
+  end
+
   module OverrideNoBumpMessageBus
     def publish_latest(topic, whisper = false)
       return if topic.custom_fields["no_bump"]
@@ -91,6 +98,10 @@ after_initialize do
 
   class ::PostMover
     prepend OverrideNoBumpWhenMove
+  end
+
+  class ::Topic
+    prepend OverrideTopic
   end
 
   TopicQuery.add_custom_filter(:no_bump) do |results, topic_query|
