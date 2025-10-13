@@ -1,11 +1,12 @@
-import { withPluginApi } from "discourse/lib/plugin-api";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { withPluginApi } from "discourse/lib/plugin-api";
 
 function registerTopicFooterButtons(api) {
   const currentUser = api.getCurrentUser();
-  if (!(currentUser && (currentUser.trust_level == 4 || currentUser.staff)))
+  if (!(currentUser && (currentUser.trust_level === 4 || currentUser.staff))) {
     return;
+  }
   api.addTopicAdminMenuButton((topic) => {
     return {
       id: "no-bump",
@@ -34,7 +35,7 @@ function registerTopicFooterButtons(api) {
           .catch(popupAjaxError);
       },
       classNames: ["no-bump"],
-    }
+    };
   });
   api.addTopicAdminMenuButton((topic) => {
     return {
@@ -64,20 +65,18 @@ function registerTopicFooterButtons(api) {
           .catch(popupAjaxError);
       },
       classNames: ["hide-from-hot"],
-    }
+    };
   });
 }
 
 export default {
   name: "extend-for-no-bump",
   initialize(container) {
-    const siteSettings = container.lookup("site-settings:main");
+    const siteSettings = container.lookup("service:site-settings");
     if (!siteSettings.no_bump_enabled) {
       return;
     }
 
-    withPluginApi("0.8.28", (api) =>
-      registerTopicFooterButtons(api, container)
-    );
+    withPluginApi((api) => registerTopicFooterButtons(api, container));
   },
 };

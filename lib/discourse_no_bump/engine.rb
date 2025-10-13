@@ -6,4 +6,3 @@ module ::DiscourseNoBump
     isolate_namespace DiscourseNoBump
   end
 end
-
