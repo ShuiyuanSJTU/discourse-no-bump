@@ -44,12 +44,8 @@ after_initialize do
 
   module OverrideNoBumpWhenRevise
     def bump_topic
-      # modify here
-      return if bypass_bump? || !is_last_post? || @topic.custom_fields["no_bump"]
-      @topic.update_column(:bumped_at, Time.now)
-      TopicTrackingState.publish_muted(@topic)
-      TopicTrackingState.publish_unmuted(@topic)
-      TopicTrackingState.publish_latest(@topic)
+      return if @topic.custom_fields["no_bump"]
+      super
     end
   end
 
